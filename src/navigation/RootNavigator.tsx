@@ -1,11 +1,13 @@
 import React from 'react';
 import {
+  createNavigationContainerRef,
   DarkTheme,
   LinkingOptions,
   NavigationContainer,
   Theme,
 } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { colors, fontWeight } from '@/theme';
 import type { RootStackParamList } from './types';
@@ -61,9 +63,25 @@ const linking: LinkingOptions<RootStackParamList> = {
   },
 };
 
+const navRef = createNavigationContainerRef<RootStackParamList>();
+
+/** One-shot startup route from storage — used by dev tooling/screenshot runs. */
+function consumeDevRoute() {
+  AsyncStorage.getItem('jobsitecalc.devRoute')
+    .then((raw) => {
+      if (!raw) return;
+      AsyncStorage.removeItem('jobsitecalc.devRoute');
+      const { name, params } = JSON.parse(raw);
+      if (navRef.isReady()) {
+        navRef.navigate(name, params);
+      }
+    })
+    .catch(() => {});
+}
+
 export function RootNavigator() {
   return (
-    <NavigationContainer theme={navTheme} linking={linking}>
+    <NavigationContainer theme={navTheme} linking={linking} ref={navRef} onReady={consumeDevRoute}>
       <Stack.Navigator screenOptions={screenOptions}>
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Calculator" component={CalculatorScreen} />
