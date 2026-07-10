@@ -7,7 +7,7 @@ import { useEntitlement } from '@/iap/useEntitlement';
 import { colors, fontSize, fontWeight, spacing } from '@/theme';
 import type { RootStackParamList } from '@/navigation/types';
 
-const SUPPORT_EMAIL = 'kaleguymon@gmail.com';
+const SUPPORT_EMAIL = 'kaleguymon+jobsitecalc@gmail.com';
 const SUPPORT_URL = 'https://kale1022.github.io/jobsite-calc/';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Settings'>;
