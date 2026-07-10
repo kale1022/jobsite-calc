@@ -8,6 +8,7 @@ import { colors, fontSize, fontWeight, spacing } from '@/theme';
 import type { RootStackParamList } from '@/navigation/types';
 
 const SUPPORT_EMAIL = 'kaleguymon@gmail.com';
+const SUPPORT_URL = 'https://kale1022.github.io/jobsite-calc/';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Settings'>;
 
@@ -63,7 +64,17 @@ export function SettingsScreen({ navigation }: Props) {
         <AppButton
           title="Contact Support"
           variant="ghost"
-          onPress={() => Linking.openURL(`mailto:${SUPPORT_EMAIL}?subject=JobSite%20Calc`)}
+          onPress={async () => {
+            try {
+              await Linking.openURL(`mailto:${SUPPORT_EMAIL}?subject=JobSite%20Calc`);
+            } catch {
+              // No mail app configured — show the address and offer the web page.
+              Alert.alert('Contact Support', `Email us at:\n${SUPPORT_EMAIL}`, [
+                { text: 'Open Support Page', onPress: () => Linking.openURL(SUPPORT_URL) },
+                { text: 'OK', style: 'cancel' },
+              ]);
+            }
+          }}
         />
       </Card>
     </ScreenContainer>
