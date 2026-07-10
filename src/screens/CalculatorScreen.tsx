@@ -23,7 +23,16 @@ export function CalculatorScreen({ navigation, route }: Props) {
   const calc = getCalculator(route.params.calculatorId);
   const { isPremium } = useEntitlement();
 
-  const [inputs, setInputs] = useState<Record<string, string>>({});
+  // Deep links can prefill inputs: jobsitecalc://calculator/concrete?length=10&width=10&depth=4
+  const [inputs, setInputs] = useState<Record<string, string>>(() => {
+    const params = route.params as unknown as Record<string, string | undefined>;
+    const initial: Record<string, string> = {};
+    for (const field of calc.fields) {
+      const v = params[field.key];
+      if (typeof v === 'string') initial[field.key] = v;
+    }
+    return initial;
+  });
   const [selects, setSelects] = useState<Record<string, number>>(() =>
     Object.fromEntries((calc.selects ?? []).map((s) => [s.key, s.defaultValue])),
   );

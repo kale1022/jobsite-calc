@@ -2,7 +2,8 @@ import type { ResultLine } from '@/types';
 
 export type RootStackParamList = {
   Home: undefined;
-  Calculator: { calculatorId: string };
+  /** prefill: optional initial input values (deep links / screenshots). */
+  Calculator: { calculatorId: string; prefill?: Record<string, string> };
   Paywall: undefined;
   Settings: undefined;
   Privacy: undefined;

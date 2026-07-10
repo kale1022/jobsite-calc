@@ -1,5 +1,10 @@
 import React from 'react';
-import { DarkTheme, NavigationContainer, Theme } from '@react-navigation/native';
+import {
+  DarkTheme,
+  LinkingOptions,
+  NavigationContainer,
+  Theme,
+} from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { colors, fontWeight } from '@/theme';
@@ -38,9 +43,27 @@ const screenOptions = {
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
+const linking: LinkingOptions<RootStackParamList> = {
+  prefixes: ['jobsitecalc://'],
+  config: {
+    screens: {
+      Home: '',
+      Calculator: {
+        path: 'calculator/:calculatorId',
+        parse: { calculatorId: String },
+      },
+      Paywall: 'paywall',
+      Settings: 'settings',
+      Privacy: 'privacy',
+      Projects: 'projects',
+      ProjectDetail: 'project/:projectId',
+    },
+  },
+};
+
 export function RootNavigator() {
   return (
-    <NavigationContainer theme={navTheme}>
+    <NavigationContainer theme={navTheme} linking={linking}>
       <Stack.Navigator screenOptions={screenOptions}>
         <Stack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
         <Stack.Screen name="Calculator" component={CalculatorScreen} />
